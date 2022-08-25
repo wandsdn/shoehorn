@@ -1,0 +1,6 @@
+A library for finding mappings from a virtual pipeline to a physical pipeline
+
+Usage:
+map_pipelines takes a yaml definition of a physical pipline and a yaml definition of a virtual pipeline, and finds a mapping if possible
+
+eg. python3 map_pipelines.py hardware/ofdpa.yml applications/faucet.yml

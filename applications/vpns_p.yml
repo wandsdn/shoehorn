@@ -1,0 +1,54 @@
+actions:
+    penultimate_hop:
+        primitives:
+            - set_eth_src
+            - set_eth_dst
+            - pop_mpls
+            - dec_ttl
+            - output
+    tunnel:
+        primitives:
+            - set_eth_src
+            - set_eth_dst
+            - output
+            - dec_ttl
+    local_delivery:
+        primitives:
+            - output
+    remote_delivery_ingress:
+        primitives:
+            - push_mpls
+            - output
+    remote_delivery_egress:
+        primitives:
+            - pop_mpls
+    default_out_ingress:
+        primitives:
+            - push_mpls
+            - output
+    default_in_ingress:
+        primitives:
+            - push_mpls
+            - output
+tables:
+    p_table:
+        matches:
+            hdr.mpls.label: exact
+        actions:
+            - penultimate_hop
+            - tunnel
+    termination:
+        matches:
+            hdr.ethernet.destination: exact
+        actions: []
+pipeline:
+    - p_module:
+        - type: conditional
+          field: istd.ethertype
+          value: 0x8847
+          iftrue:
+            - type: table
+              table: termination
+              iftrue:
+                - type: table
+                  table: p_table

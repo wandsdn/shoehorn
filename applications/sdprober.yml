@@ -1,0 +1,26 @@
+actions:
+    mirrored_packet_action:
+        primitives:
+            - output
+    probe_packet_action:
+        primitives:
+            - set_eth_dst
+            - set_eth_src
+            - set_vid
+            - dec_ttl
+            - multicast
+tables:
+    probe_table:
+        matches:
+            hdr.ethernet.destination: all_or_exact
+        actions:
+            - mirrored_packet_action
+            - probe_packet_action
+pipeline:
+    - module:
+        - type: conditional
+          field: istd.ip_proto
+          value: 1
+          iftrue:
+            - type: table
+              table: probe_table

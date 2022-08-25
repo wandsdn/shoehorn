@@ -1,0 +1,42 @@
+actions:
+    drop_action:
+        primitives:
+            - mark_to_drop
+    multicast_action:
+        primitives:
+            - multicast
+    unicast_action:
+        primitives:
+            - output
+    notify_action:
+        primitives:
+            - notify
+tables:
+    lldp:
+        matches:
+            istd.ethertype: exact
+        actions:
+            - notify_action
+    eap:
+        matches:
+            istd.ingress_port: exact
+            istd.ethertype: exact
+        actions:
+            - unicast_action
+    unauthed:
+        matches:
+            istd.ingress_port: all_or_exact
+            hdr.ethernet.source: all_or_exact
+            istd.ethertype: all_or_exact
+        actions:
+            - drop_action
+
+pipeline:
+    - protocols_module:
+        - type: table
+          table: eap
+        - type: table
+          table: lldp
+    - security_module:
+        - type: table
+          table: unauthed

@@ -1,0 +1,46 @@
+actions:
+    default_action:
+        primitives:
+            - output
+    shunt_action:
+        primitives:
+            - output
+    drop_action:
+        primitives:
+            - mark_to_drop
+tables:
+    v6_shunt_table:
+        matches:
+            hdr.ipv6.source: exact
+            hdr.ipv6.destination: exact
+            hdr.tcp.source: exact
+            hdr.tcp.destination: exact
+        actions:
+            - default_action
+            - shunt_action
+            - drop_action
+    v4_shunt_table:
+        matches:
+            hdr.ipv4.source: exact
+            hdr.ipv4.destination: exact
+            hdr.tcp.source: exact
+            hdr.tcp.destination: exact
+        actions:
+            - default_action
+            - shunt_action
+            - drop_action
+pipeline:
+    - shunt_module:
+        - type: conditional
+          field: istd.ethertype
+          value: 0x86dd
+          iftrue:
+            - type: table
+              table: v6_shunt_table
+          iffalse:
+            - type: conditional
+              field: istd.ethertype
+              value: 0x800
+              iftrue:
+                - type: table
+                  table: v4_shunt_table

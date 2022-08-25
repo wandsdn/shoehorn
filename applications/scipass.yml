@@ -1,0 +1,30 @@
+actions:
+    default_action:
+        primitives:
+            - output
+            - clone
+    bypass_action:
+        primitives:
+            - output
+tables:
+    default_table:
+        matches:
+            istd.ingress_port: all_or_exact
+        actions:
+            - default_action
+    bypass_table:
+        matches:
+            hdr.ipv6.source: all_or_exact
+            hdr.ipv6.destination: all_or_exact
+            istd.ip_proto: all_or_exact
+            hdr.tcp.source: all_or_exact
+            hdr.tcp.destination: all_or_exact
+        actions:
+            - bypass_action
+pipeline:
+    - module:
+        - type: table
+          table: bypass_table
+          iffalse:
+            - type: table
+              table: default_table

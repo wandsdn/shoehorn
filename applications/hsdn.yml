@@ -1,0 +1,47 @@
+actions:
+    forward_action:
+        primitives:
+            - set_eth_src
+            - set_eth_dst
+            - dec_ttl
+            - output
+    turnaround_action:
+        primitives:
+            - pop_mpls
+            - dec_ttl
+tables:
+    turnaround_table:
+        matches:
+            istd.ingress_port: exact
+            hdr.mpls.label: exact
+        actions:
+            - forward_action
+            - turnaround_action
+    southbound_table:
+        matches:
+            hdr.mpls.label: exact
+        actions:
+            - forward_action
+pipeline:
+    - turnaround_module:
+        - type: conditional
+          field: istd.ethertype
+          value: 0x8847
+          iftrue:
+            - type: conditional
+              field: hdr.ethernet.destination
+              value: 0x000000000000
+              iftrue:
+                - type: table
+                  table: turnaround_table
+    - southbound_module:
+        - type: conditional
+          field: istd.ethertype
+          value: 0x8847
+          iftrue:
+            - type: conditional
+              field: hdr.ethernet.destination
+              value: 0x000000000000
+              iftrue:
+                - type: table
+                  table: southbound_table

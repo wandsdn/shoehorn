@@ -1,0 +1,752 @@
+actions:
+    drop_action:
+        primitives:
+            - mark_to_drop
+    notify_action:
+        primitives:
+            - notify
+    push_vlan_action:
+        primitives:
+            - push_vlan
+    pop_vlan_action:
+        primitives:
+            - pop_vlan
+    goto_action:
+        primitives:
+            - goto
+    set_eth_src_action:
+        primitives:
+            - set_eth_src
+    set_eth_dst_action:
+        primitives:
+            - set_eth_dst
+    set_vlan_vid_action:
+        primitives:
+            - set_vid
+    output_action:
+        primitives:
+            - output
+    dec_ttl_action:
+        primitives:
+            - dec_ttl
+    multicast_action:
+        primitives:
+            - multicast
+    clone_action:
+        primitives:
+            - clone
+
+tables:
+    vlan_filter:
+        matches:
+            istd.ingress_port: exact
+            hdr.vlan.vid: exact
+        actions:
+            - drop_action
+            - goto_action
+
+    acl_0:
+        matches:
+            istd.ingress_port: ternary
+            hdr.ethernet.source: ternary
+            hdr.ethernet.destination: ternary
+            istd.ethertype: ternary
+            hdr.vlan.vid: ternary
+            hdr.vlan.pcp: ternary
+            istd.is_tagged: ternary
+            hdr.ipv4.source: ternary
+            hdr.ipv4.destination: ternary
+            hdr.ipv6.source: ternary
+            hdr.ipv6.destination: ternary
+            istd.ip_proto: ternary
+            hdr.ipv4.dscp: ternary
+            hdr.ipv4.ecn: ternary
+            hdr.tcp.source: ternary
+            hdr.tcp.destination: ternary
+            hdr.udp.source: ternary
+            hdr.udp.destination: ternary
+        actions:
+            - notify_action
+            - push_vlan_action
+            - pop_vlan_action
+            - goto_action
+            - set_eth_src_action
+            - set_eth_dst_action
+            - set_vlan_vid_action
+            - output_action
+            - dec_ttl_action
+            - multicast_action
+            - clone_action
+            - drop_action
+
+    acl_1:
+        matches:
+            istd.ingress_port: ternary
+            hdr.ethernet.source: ternary
+            hdr.ethernet.destination: ternary
+            istd.ethertype: ternary
+            hdr.vlan.vid: ternary
+            hdr.vlan.pcp: ternary
+            istd.is_tagged: ternary
+            hdr.ipv4.source: ternary
+            hdr.ipv4.destination: ternary
+            hdr.ipv6.source: ternary
+            hdr.ipv6.destination: ternary
+            istd.ip_proto: ternary
+            hdr.ipv4.dscp: ternary
+            hdr.ipv4.ecn: ternary
+            hdr.tcp.source: ternary
+            hdr.tcp.destination: ternary
+            hdr.udp.source: ternary
+            hdr.udp.destination: ternary
+        actions:
+            - notify_action
+            - push_vlan_action
+            - pop_vlan_action
+            - goto_action
+            - set_eth_src_action
+            - set_eth_dst_action
+            - set_vlan_vid_action
+            - output_action
+            - dec_ttl_action
+            - multicast_action
+            - clone_action
+            - drop_action
+
+    acl_2:
+        matches:
+            istd.ingress_port: ternary
+            hdr.ethernet.source: ternary
+            hdr.ethernet.destination: ternary
+            istd.ethertype: ternary
+            hdr.vlan.vid: ternary
+            hdr.vlan.pcp: ternary
+            istd.is_tagged: ternary
+            hdr.ipv4.source: ternary
+            hdr.ipv4.destination: ternary
+            istd.ip_proto: ternary
+            hdr.ipv4.dscp: ternary
+            hdr.ipv4.ecn: ternary
+            hdr.ipv6.source: ternary
+            hdr.ipv6.destination: ternary
+            hdr.tcp.source: ternary
+            hdr.tcp.destination: ternary
+            hdr.udp.source: ternary
+            hdr.udp.destination: ternary
+        actions:
+            - notify_action
+            - push_vlan_action
+            - pop_vlan_action
+            - goto_action
+            - set_eth_src_action
+            - set_eth_dst_action
+            - set_vlan_vid_action
+            - output_action
+            - dec_ttl_action
+            - multicast_action
+            - clone_action
+            - drop_action
+
+    acl_3:
+        matches:
+            istd.ingress_port: ternary
+            hdr.ethernet.source: ternary
+            hdr.ethernet.destination: ternary
+            istd.ethertype: ternary
+            hdr.vlan.vid: ternary
+            hdr.vlan.pcp: ternary
+            istd.is_tagged: ternary
+            hdr.ipv4.source: ternary
+            hdr.ipv4.destination: ternary
+            hdr.ipv6.source: ternary
+            hdr.ipv6.destination: ternary
+            istd.ip_proto: ternary
+            hdr.ipv4.dscp: ternary
+            hdr.ipv4.ecn: ternary
+            hdr.tcp.source: ternary
+            hdr.tcp.destination: ternary
+            hdr.udp.source: ternary
+            hdr.udp.destination: ternary
+        actions:
+            - notify_action
+            - push_vlan_action
+            - pop_vlan_action
+            - goto_action
+            - set_eth_src_action
+            - set_eth_dst_action
+            - set_vlan_vid_action
+            - output_action
+            - dec_ttl_action
+            - multicast_action
+            - clone_action
+            - drop_action
+
+    acl_4:
+        matches:
+            istd.ingress_port: ternary
+            hdr.ethernet.source: ternary
+            hdr.ethernet.destination: ternary
+            istd.ethertype: ternary
+            hdr.vlan.vid: ternary
+            hdr.vlan.pcp: ternary
+            istd.is_tagged: ternary
+            hdr.ipv4.source: ternary
+            hdr.ipv4.destination: ternary
+            hdr.ipv6.source: ternary
+            hdr.ipv6.destination: ternary
+            istd.ip_proto: ternary
+            hdr.ipv4.dscp: ternary
+            hdr.ipv4.ecn: ternary
+            hdr.tcp.source: ternary
+            hdr.tcp.destination: ternary
+            hdr.udp.source: ternary
+            hdr.udp.destination: ternary
+        actions:
+            - notify_action
+            - push_vlan_action
+            - pop_vlan_action
+            - goto_action
+            - set_eth_src_action
+            - set_eth_dst_action
+            - set_vlan_vid_action
+            - output_action
+            - dec_ttl_action
+            - multicast_action
+            - clone_action
+            - drop_action
+
+    acl_5:
+        matches:
+            istd.ingress_port: ternary
+            hdr.ethernet.source: ternary
+            hdr.ethernet.destination: ternary
+            istd.ethertype: ternary
+            hdr.vlan.vid: ternary
+            hdr.vlan.pcp: ternary
+            istd.is_tagged: ternary
+            hdr.ipv4.source: ternary
+            hdr.ipv4.destination: ternary
+            hdr.ipv6.source: ternary
+            hdr.ipv6.destination: ternary
+            istd.ip_proto: ternary
+            hdr.ipv4.dscp: ternary
+            hdr.ipv4.ecn: ternary
+            hdr.tcp.source: ternary
+            hdr.tcp.destination: ternary
+            hdr.udp.source: ternary
+            hdr.udp.destination: ternary
+        actions:
+            - notify_action
+            - push_vlan_action
+            - pop_vlan_action
+            - goto_action
+            - set_eth_src_action
+            - set_eth_dst_action
+            - set_vlan_vid_action
+            - output_action
+            - dec_ttl_action
+            - multicast_action
+            - clone_action
+            - drop_action
+
+    acl_6:
+        matches:
+            istd.ingress_port: ternary
+            hdr.ethernet.source: ternary
+            hdr.ethernet.destination: ternary
+            istd.ethertype: ternary
+            hdr.vlan.vid: ternary
+            hdr.vlan.pcp: ternary
+            istd.is_tagged: ternary
+            hdr.ipv4.source: ternary
+            hdr.ipv4.destination: ternary
+            hdr.ipv6.source: ternary
+            hdr.ipv6.destination: ternary
+            istd.ip_proto: ternary
+            hdr.ipv4.dscp: ternary
+            hdr.ipv4.ecn: ternary
+            hdr.tcp.source: ternary
+            hdr.tcp.destination: ternary
+            hdr.udp.source: ternary
+            hdr.udp.destination: ternary
+        actions:
+            - notify_action
+            - push_vlan_action
+            - pop_vlan_action
+            - goto_action
+            - set_eth_src_action
+            - set_eth_dst_action
+            - set_vlan_vid_action
+            - output_action
+            - dec_ttl_action
+            - multicast_action
+            - clone_action
+            - drop_action
+
+    acl_7:
+        matches:
+            istd.ingress_port: ternary
+            hdr.ethernet.source: ternary
+            hdr.ethernet.destination: ternary
+            istd.ethertype: ternary
+            hdr.vlan.vid: ternary
+            hdr.vlan.pcp: ternary
+            istd.is_tagged: ternary
+            hdr.ipv4.source: ternary
+            hdr.ipv4.destination: ternary
+            hdr.ipv6.source: ternary
+            hdr.ipv6.destination: ternary
+            istd.ip_proto: ternary
+            hdr.ipv4.dscp: ternary
+            hdr.ipv4.ecn: ternary
+            hdr.tcp.source: ternary
+            hdr.tcp.destination: ternary
+            hdr.udp.source: ternary
+            hdr.udp.destination: ternary
+        actions:
+            - notify_action
+            - push_vlan_action
+            - pop_vlan_action
+            - goto_action
+            - set_eth_src_action
+            - set_eth_dst_action
+            - set_vlan_vid_action
+            - output_action
+            - dec_ttl_action
+            - multicast_action
+            - clone_action
+            - drop_action
+
+    acl_8:
+        matches:
+            istd.ingress_port: ternary
+            hdr.ethernet.source: ternary
+            hdr.ethernet.destination: ternary
+            istd.ethertype: ternary
+            hdr.vlan.vid: ternary
+            hdr.vlan.pcp: ternary
+            istd.is_tagged: ternary
+            hdr.ipv4.source: ternary
+            hdr.ipv4.destination: ternary
+            hdr.ipv6.source: ternary
+            hdr.ipv6.destination: ternary
+            istd.ip_proto: ternary
+            hdr.ipv4.dscp: ternary
+            hdr.ipv4.ecn: ternary
+            hdr.tcp.source: ternary
+            hdr.tcp.destination: ternary
+            hdr.udp.source: ternary
+            hdr.udp.destination: ternary
+        actions:
+            - notify_action
+            - push_vlan_action
+            - pop_vlan_action
+            - goto_action
+            - set_eth_src_action
+            - set_eth_dst_action
+            - set_vlan_vid_action
+            - output_action
+            - dec_ttl_action
+            - multicast_action
+            - clone_action
+            - drop_action
+
+    acl_9:
+        matches:
+            istd.ingress_port: ternary
+            hdr.ethernet.source: ternary
+            hdr.ethernet.destination: ternary
+            istd.ethertype: ternary
+            hdr.vlan.vid: ternary
+            hdr.vlan.pcp: ternary
+            istd.is_tagged: ternary
+            hdr.ipv4.source: ternary
+            hdr.ipv4.destination: ternary
+            hdr.ipv6.source: ternary
+            hdr.ipv6.destination: ternary
+            istd.ip_proto: ternary
+            hdr.ipv4.dscp: ternary
+            hdr.ipv4.ecn: ternary
+            hdr.tcp.source: ternary
+            hdr.tcp.destination: ternary
+            hdr.udp.source: ternary
+            hdr.udp.destination: ternary
+        actions:
+            - notify_action
+            - push_vlan_action
+            - pop_vlan_action
+            - goto_action
+            - set_eth_src_action
+            - set_eth_dst_action
+            - set_vlan_vid_action
+            - output_action
+            - dec_ttl_action
+            - multicast_action
+            - clone_action
+            - drop_action
+
+    acl_10:
+        matches:
+            istd.ingress_port: ternary
+            hdr.ethernet.source: ternary
+            hdr.ethernet.destination: ternary
+            istd.ethertype: ternary
+            hdr.vlan.vid: ternary
+            hdr.vlan.pcp: ternary
+            istd.is_tagged: ternary
+            hdr.ipv4.source: ternary
+            hdr.ipv4.destination: ternary
+            hdr.ipv6.source: ternary
+            hdr.ipv6.destination: ternary
+            istd.ip_proto: ternary
+            hdr.ipv4.dscp: ternary
+            hdr.ipv4.ecn: ternary
+            hdr.tcp.source: ternary
+            hdr.tcp.destination: ternary
+            hdr.udp.source: ternary
+            hdr.udp.destination: ternary
+        actions:
+            - notify_action
+            - push_vlan_action
+            - pop_vlan_action
+            - goto_action
+            - set_eth_src_action
+            - set_eth_dst_action
+            - set_vlan_vid_action
+            - output_action
+            - dec_ttl_action
+            - multicast_action
+            - clone_action
+            - drop_action
+
+    acl_11:
+        matches:
+            istd.ingress_port: ternary
+            hdr.ethernet.source: ternary
+            hdr.ethernet.destination: ternary
+            istd.ethertype: ternary
+            hdr.vlan.vid: ternary
+            hdr.vlan.pcp: ternary
+            istd.is_tagged: ternary
+            hdr.ipv4.source: ternary
+            hdr.ipv4.destination: ternary
+            hdr.ipv6.source: ternary
+            hdr.ipv6.destination: ternary
+            istd.ip_proto: ternary
+            hdr.ipv4.dscp: ternary
+            hdr.ipv4.ecn: ternary
+            hdr.tcp.source: ternary
+            hdr.tcp.destination: ternary
+            hdr.udp.source: ternary
+            hdr.udp.destination: ternary
+        actions:
+            - notify_action
+            - push_vlan_action
+            - pop_vlan_action
+            - goto_action
+            - set_eth_src_action
+            - set_eth_dst_action
+            - set_vlan_vid_action
+            - output_action
+            - dec_ttl_action
+            - multicast_action
+            - clone_action
+            - drop_action
+
+    acl_12:
+        matches:
+            istd.ingress_port: ternary
+            hdr.ethernet.source: ternary
+            hdr.ethernet.destination: ternary
+            istd.ethertype: ternary
+            hdr.vlan.vid: ternary
+            hdr.vlan.pcp: ternary
+            istd.is_tagged: ternary
+            hdr.ipv4.source: ternary
+            hdr.ipv4.destination: ternary
+            hdr.ipv6.source: ternary
+            hdr.ipv6.destination: ternary
+            istd.ip_proto: ternary
+            hdr.ipv4.dscp: ternary
+            hdr.ipv4.ecn: ternary
+            hdr.tcp.source: ternary
+            hdr.tcp.destination: ternary
+            hdr.udp.source: ternary
+            hdr.udp.destination: ternary
+        actions:
+            - notify_action
+            - push_vlan_action
+            - pop_vlan_action
+            - goto_action
+            - set_eth_src_action
+            - set_eth_dst_action
+            - set_vlan_vid_action
+            - output_action
+            - dec_ttl_action
+            - multicast_action
+            - clone_action
+            - drop_action
+
+    acl_13:
+        matches:
+            istd.ingress_port: ternary
+            hdr.ethernet.source: ternary
+            hdr.ethernet.destination: ternary
+            istd.ethertype: ternary
+            hdr.vlan.vid: ternary
+            hdr.vlan.pcp: ternary
+            istd.is_tagged: ternary
+            hdr.ipv4.source: ternary
+            hdr.ipv4.destination: ternary
+            hdr.ipv6.source: ternary
+            hdr.ipv6.destination: ternary
+            istd.ip_proto: ternary
+            hdr.ipv4.dscp: ternary
+            hdr.ipv4.ecn: ternary
+            hdr.tcp.source: ternary
+            hdr.tcp.destination: ternary
+            hdr.udp.source: ternary
+            hdr.udp.destination: ternary
+        actions:
+            - notify_action
+            - push_vlan_action
+            - pop_vlan_action
+            - goto_action
+            - set_eth_src_action
+            - set_eth_dst_action
+            - set_vlan_vid_action
+            - output_action
+            - dec_ttl_action
+            - multicast_action
+            - clone_action
+            - drop_action
+
+    acl_14:
+        matches:
+            istd.ingress_port: ternary
+            hdr.ethernet.source: ternary
+            hdr.ethernet.destination: ternary
+            istd.ethertype: ternary
+            hdr.vlan.vid: ternary
+            hdr.vlan.pcp: ternary
+            istd.is_tagged: ternary
+            hdr.ipv4.source: ternary
+            hdr.ipv4.destination: ternary
+            hdr.ipv6.source: ternary
+            hdr.ipv6.destination: ternary
+            istd.ip_proto: ternary
+            hdr.ipv4.dscp: ternary
+            hdr.ipv4.ecn: ternary
+            hdr.tcp.source: ternary
+            hdr.tcp.destination: ternary
+            hdr.udp.source: ternary
+            hdr.udp.destination: ternary
+        actions:
+            - notify_action
+            - push_vlan_action
+            - pop_vlan_action
+            - goto_action
+            - set_eth_src_action
+            - set_eth_dst_action
+            - set_vlan_vid_action
+            - output_action
+            - dec_ttl_action
+            - multicast_action
+            - clone_action
+            - drop_action
+
+    acl_15:
+        matches:
+            istd.ingress_port: ternary
+            hdr.ethernet.source: ternary
+            hdr.ethernet.destination: ternary
+            istd.ethertype: ternary
+            hdr.vlan.vid: ternary
+            hdr.vlan.pcp: ternary
+            istd.is_tagged: ternary
+            istd.is_tagged: ternary
+            hdr.ipv4.source: ternary
+            hdr.ipv4.destination: ternary
+            hdr.ipv6.source: ternary
+            hdr.ipv6.destination: ternary
+            istd.ip_proto: ternary
+            hdr.ipv4.dscp: ternary
+            hdr.ipv4.ecn: ternary
+            hdr.tcp.source: ternary
+            hdr.tcp.destination: ternary
+            hdr.udp.source: ternary
+            hdr.udp.destination: ternary
+        actions:
+            - notify_action
+            - push_vlan_action
+            - pop_vlan_action
+            - goto_action
+            - set_eth_src_action
+            - set_eth_dst_action
+            - set_vlan_vid_action
+            - output_action
+            - dec_ttl_action
+            - multicast_action
+            - clone_action
+            - drop_action
+
+    acl_16:
+        matches:
+            istd.ingress_port: ternary
+            hdr.ethernet.source: ternary
+            hdr.ethernet.destination: ternary
+            istd.ethertype: ternary
+            istd.is_tagged: ternary
+            hdr.vlan.vid: ternary
+            hdr.vlan.pcp: ternary
+            hdr.ipv4.source: ternary
+            hdr.ipv4.destination: ternary
+            hdr.ipv6.source: ternary
+            hdr.ipv6.destination: ternary
+            istd.ip_proto: ternary
+            hdr.ipv4.dscp: ternary
+            hdr.ipv4.ecn: ternary
+            hdr.tcp.source: ternary
+            hdr.tcp.destination: ternary
+            hdr.udp.source: ternary
+            hdr.udp.destination: ternary
+        actions:
+            - notify_action
+            - push_vlan_action
+            - pop_vlan_action
+            - goto_action
+            - set_eth_src_action
+            - set_eth_dst_action
+            - set_vlan_vid_action
+            - output_action
+            - dec_ttl_action
+            - multicast_action
+            - clone_action
+            - drop_action
+
+    fdb:
+        matches:
+            hdr.ethernet.destination: exact
+            hdr.vlan.vid: exact
+        actions:
+            - drop_action
+            - pop_vlan_action
+            - output_action
+
+    ipv4_router:
+        matches:
+            hdr.ipv4.destination: lpm
+        actions:
+            - drop_action
+            - set_eth_dst_action
+            - output_action
+            - dec_ttl_action
+
+    ipv6_router:
+        matches:
+            hdr.ipv6.destination: lpm
+        actions:
+            - drop_action
+            - set_eth_dst_action
+            - output_action
+            - dec_ttl_action
+pipeline:
+    - vlan_action_module:
+        - type: table
+          table: vlan_filter
+    - acl_1_action_module:
+        - type: target
+          name: acl_1_target
+          iftrue:
+              - type: table
+                table: acl_1
+    - acl_2_action_module:
+        - type: target
+          name: acl_2_target
+          iftrue:
+              - type: table
+                table: acl_2
+    - acl_3_action_module:
+        - type: target
+          name: acl_3_target
+          iftrue:
+              - type: table
+                table: acl_3
+    - acl_4_action_module:
+        - type: target
+          name: acl_4_target
+          iftrue:
+              - type: table
+                table: acl_4
+    - acl_5_action_module:
+        - type: target
+          name: acl_5_target
+          iftrue:
+              - type: table
+                table: acl_5
+    - acl_6_action_module:
+        - type: target
+          name: acl_6_target
+          iftrue:
+              - type: table
+                table: acl_6
+    - acl_7_action_module:
+        - type: target
+          name: acl_7_target
+          iftrue:
+              - type: table
+                table: acl_7
+    - acl_8_action_module:
+        - type: target
+          name: acl_8_target
+          iftrue:
+              - type: table
+                table: acl_8
+    - acl_9_action_module:
+        - type: target
+          name: acl_9_target
+          iftrue:
+              - type: table
+                table: acl_9
+    - acl_10_action_module:
+        - type: target
+          name: acl_10_target
+          iftrue:
+              - type: table
+                table: acl_10
+    - acl_11_action_module:
+        - type: target
+          name: acl_11_target
+          iftrue:
+              - type: table
+                table: acl_11
+    - acl_12_action_module:
+        - type: target
+          name: acl_12_target
+          iftrue:
+              - type: table
+                table: acl_12
+    - acl_13_action_module:
+        - type: target
+          name: acl_13_target
+          iftrue:
+                - type: table
+                  table: acl_13
+    - ac15_action_module:
+        - type: target
+          name: acl_15_target
+          iftrue:
+              - type: table
+                table: acl_15
+    - acl_16_action_module:
+        - type: target
+          name: acl_16_target
+          iftrue:
+              - type: table
+                table: acl_16
+    - fdb_action_module:
+        - type: target
+          name: fdb_target
+          iftrue:
+              - type: table
+                table: fdb

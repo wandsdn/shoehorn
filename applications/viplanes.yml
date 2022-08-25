@@ -1,0 +1,345 @@
+actions:
+    ingress_mirror_action:
+        primitives:
+            - clone
+    push_vlan_action:
+        primitives:
+            - set_vid
+    set_vrf_action:
+        primitives:
+            - set_vrf
+    drop_action:
+        primitives:
+            - mark_to_drop
+    notify_action:
+        primitives:
+            - notify
+    output_action:
+        primitives:
+            - output
+    resolved_nexthop_action:
+        primitives:
+            - set_eth_src
+            - set_eth_dst
+            - set_vid
+            - dec_ttl
+            - output
+    viplane_action:
+        primitives:
+            - set_eth_src
+            - set_eth_dst
+            - set_vid
+            - dec_ttl
+            - clone
+            - output
+    unknown_unicast_action:
+        primitives:
+            - multicast
+    unknown_nexthop_action:
+        primitives:
+            - notify
+            - mark_to_drop
+    multicast_action:
+        primitives:
+            - multicast
+    set_ethernet_source_action:
+        primitives:
+            - set_eth_src
+    set_ethernet_destination_action:
+        primitives:
+            - set_eth_dst
+    set_vlan_vid_action:
+        primitives:
+            - set_vid
+    pop_vlan_action:
+        primitives:
+            - pop_vlan
+
+tables:
+    lacp:
+        matches:
+            istd.ingress_port: all_or_exact
+        actions:
+            - notify_action
+
+    ingress_port_disable:
+        matches:
+            istd.ingress_port: exact
+        actions:
+            - drop_action
+
+    ingress_acl_v6:
+        matches:
+            istd.ingress_port: all_or_exact
+            hdr.ethernet.destination: ternary
+            hdr.ethernet.source: ternary
+            hdr.vlan.vid: ternary
+            hdr.tcp.source: all_or_exact
+            hdr.tcp.destination: all_or_exact
+            hdr.udp.source: all_or_exact
+            hdr.udp.destination: all_or_exact
+            hdr.ipv6.source: ternary
+            hdr.ipv6.destination: ternary
+        actions:
+            - ingress_mirror_action
+            #- push_vlan_action
+            #- set_vrf_action
+            - drop_action
+            - notify_action
+            - resolved_nexthop_action
+            - unknown_nexthop_action
+            - output_action
+            - multicast_action
+
+    ingress_acl_v4:
+        matches:
+            istd.ingress_port: all_or_exact
+            hdr.ethernet.destination: ternary
+            hdr.ethernet.source: ternary
+            hdr.vlan.vid: ternary
+            hdr.ipv4.source: ternary
+            hdr.ipv4.destination: ternary
+            hdr.tcp.source: all_or_exact
+            hdr.tcp.destination: all_or_exact
+            hdr.udp.source: all_or_exact
+            hdr.udp.destination: all_or_exact
+        actions:
+            - ingress_mirror_action
+            #- push_vlan_action
+            #- set_vrf_action
+            - drop_action
+            - notify_action
+            - resolved_nexthop_action
+            - unknown_nexthop_action
+            - output_action
+            - multicast_action
+
+    ingress_acl_arp:
+        matches:
+            istd.ingress_port: all_or_exact
+            hdr.ethernet.destination: ternary
+            hdr.ethernet.source: ternary
+            hdr.vlan.vid: ternary
+        actions:
+            - ingress_mirror_action
+            #- push_vlan_action
+            #- set_vrf_action
+            - drop_action
+            - notify_action
+            - resolved_nexthop_action
+            - unknown_nexthop_action
+            - output_action
+            - multicast_action
+
+    viplanes_v6:
+        matches:
+            hdr.ipv6.source: all_or_exact
+            hdr.ipv6.destination: all_or_exact
+            istd.ip_proto: all_or_exact
+            hdr.tcp.source: all_or_exact
+            hdr.tcp.destination: all_or_exact
+        action:
+            - viplane_action
+            - drop_action
+
+    vlan_access:
+        matches:
+            istd.ingress_port: exact
+        actions:
+            - push_vlan_action
+            #- set_vrf_action
+            - drop_action
+
+    vlan_trunk:
+        matches:
+            hdr.vlan.vid: exact
+            istd.ingress_port: exact
+        actions:
+            #- set_vrf_action
+            - drop_action
+
+    classification:
+        matches:
+            hdr.vlan.vid: exact
+            hdr.ethernet.destination: exact
+        actions: []
+
+    bogon_mac:
+        matches:
+            hdr.ethernet.source: all_or_exact
+        actions:
+            - drop_action
+
+    bogon_ethertype:
+        matches:
+            istd.ethertype: all_or_exact
+        actions:
+            - drop_action
+
+    eth_src:
+        matches:
+            hdr.ethernet.source: exact
+            hdr.vlan.vid: exact
+            istd.ingress_port: exact
+        actions:
+            - notify_action
+
+    eth_dst:
+        matches:
+            hdr.ethernet.destination: exact
+            hdr.vlan.vid: exact
+        actions:
+            - output_action
+
+    vlan_flood:
+        matches:
+            hdr.vlan.vid: exact
+        actions:
+            - unknown_unicast_action
+
+    ipv4_fib:
+        matches:
+            #istd.vrf: exact
+            #hdr.vlan.vid: all_or_exact
+            hdr.ipv4.destination: lpm
+        actions:
+            - resolved_nexthop_action
+            - unknown_nexthop_action
+            - drop_action
+
+    ipv6_fib:
+        matches:
+            #istd.vrf: exact
+            #hdr.vlan.vid: all_or_exact
+            hdr.ipv6.destination: lpm
+        actions:
+            - resolved_nexthop_action
+            - unknown_nexthop_action
+            - drop_action
+
+    vip6:
+        matches:
+            hdr.ethernet.destination: all_or_exact
+            hdr.vlan.vid: all_or_exact
+            hdr.ipv6.destination: all_or_exact
+        actions:
+            - notify_action
+            - drop_action
+
+    vip4:
+        matches:
+            hdr.ethernet.destination: all_or_exact
+            hdr.vlan.vid: all_or_exact
+            hdr.ipv4.destination: all_or_exact
+            istd.ip_proto: all_or_exact
+        actions:
+            - notify_action
+            - drop_action
+pipeline:
+    - ingress_module:
+        - type: table
+          table: ingress_port_disable
+        - type: table
+          table: bogon_mac
+        - type: conditional
+          field: istd.is_tagged
+          value: 1
+          mask: null
+          iftrue:
+            - type: table
+              table: vlan_trunk
+          iffalse:
+            - type: table
+              table: vlan_access
+        - type: conditional
+          field: istd.ethertype
+          value: 0x86DD # NOTE: I think that I need to fix path checking with
+          # conditionals, like, a ipv6 match in a hw path isnt a problem if you
+          # have a ipv4 match in your sw path
+          mask: null
+          iftrue:
+            - type: table
+              table: ingress_acl_v6
+          iffalse:
+            - type: conditional
+              field: istd.ethertype
+              value: 0x800
+              mask: null
+              iftrue:
+                - type: table
+                  table: ingress_acl_v4
+              iffalse:
+                - type: conditional
+                  field: istd.ethertype
+                  value: 0x806
+                  mask: null
+                  iftrue:
+                    - type: table
+                      table: ingress_acl_arp
+                  iffalse:
+                    - type: conditional
+                      field: istd.ethertype
+                      value: 0x8809
+                      mask: null
+                      iftrue:
+                        - type: conditional
+                          field: hdr.ethernet.destination
+                          value: 0x0180c2000002
+                          mask: null
+                          iftrue:
+                            - type: table
+                              table: lacp
+                      iffalse:
+                          - type: table
+                            table: bogon_ethertype
+    - vlan_acl_module:
+        - type: conditional
+          field: istd.ethertype
+          value: 0x86DD
+          mask: null
+          iftrue:
+            - type: table
+              table: viplanes_v6
+
+    - l3_module:
+        - type: table
+          table: eth_src
+        - type: table
+          table: classification
+          iftrue:
+            - type: conditional
+              field: istd.ethertype
+              value: 0x86DD
+              mask: null
+              iftrue:
+                - type: table
+                  table: ipv6_fib
+              iffalse:
+                - type: conditional
+                  field: istd.ethertype
+                  value: 0x800
+                  iftrue:
+                    - type: table
+                      table: ipv4_fib
+        - type: conditional
+          field: istd.ethertype
+          value: 0x86DD
+          mask: null
+          iftrue:
+            - type: table
+              table: vip6
+          iffalse:
+            - type: conditional
+              field: istd.ethertype
+              value: 0x86dd
+              mask: null
+              iftrue:
+                - type: table
+                  table: vip4
+
+    - forwarding_module:
+        - type: table
+          table: eth_dst
+          iffalse:
+            - type: table
+              table: vlan_flood

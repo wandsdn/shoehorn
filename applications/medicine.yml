@@ -1,0 +1,35 @@
+actions:
+    drop_action:
+        primitives:
+            - mark_to_drop
+    forward_action:
+        primitives:
+            - output
+tables:
+    arp_table:
+        matches:
+            istd.ethertype: all_or_exact
+        actions:
+            - forward_action
+    access_table:
+        matches:
+            istd.ethertype: all_or_exact
+            hdr.ipv4.source: all_or_exact
+            hdr.ipv4.destination: all_or_exact
+            hdr.ipv6.source: all_or_exact
+            hdr.ipv6.destination: all_or_exact
+            istd.ip_proto: all_or_exact
+            hdr.tcp.source: all_or_exact
+            hdr.tcp.destination: all_or_exact
+            hdr.udp.source: all_or_exact
+            hdr.udp.destination: all_or_exact
+        actions:
+            - forward_action
+            - drop_action
+
+pipeline:
+    - module:
+        - type: table
+          table: arp_table
+        - type: table
+          table: access_table

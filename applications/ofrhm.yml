@@ -1,0 +1,37 @@
+actions:
+    rewrite_src_action:
+        primtives:
+            - set_ipv4_src
+            - output
+    rewrite_dst_action:
+        primitives:
+            - set_ipv4_dst
+            - output
+    notify_action:
+        primitives:
+            - notify
+            - output
+tables:
+    table:
+        matches:
+            hdr.ipv4.source: exact
+            hdr.ipv4.destination: exact
+            istd.ip_proto: exact
+            hdr.tcp.source: exact
+            hdr.tcp.destination: exact
+        actions:
+            - rewrite_src_action
+            - rewrite_dst_action
+            - notify_action
+pipeline:
+    - module:
+        - type: conditional
+          field: istd.ethertype
+          value: 0x86DD
+          iffalse:
+            - type: conditional
+              field: istd.ethertype
+              value: 0x800
+              iftrue:
+                - type: table
+                  table: table

@@ -1,0 +1,558 @@
+actions:
+    push_vlan_action:
+        primitives:
+            - set_vid
+    notify_controller_action:
+        primitives:
+            - notify
+    drop_action:
+        primitives:
+            - mark_to_drop
+    multicast_action:
+        primitives:
+            - multicast
+    set_ipv4_src_action:
+        primitives:
+            - set_ipv4_src
+    set_ipv4_dst_action:
+        primitives:
+            - set_ipv4_dst
+    set_eth_src_action:
+        primitives:
+            - set_eth_src
+    set_eth_dst_action:
+        primitives:
+            - set_eth_dst
+    set_vlan_vid_action:
+        primitives:
+            - set_vid
+    pop_vlan_action:
+        primitives:
+            - pop_vlan
+    output_action:
+        primitives:
+            - output
+    multicast_action:
+        primitives:
+            - multicast
+    clone_action:
+        primitives:
+            - clone
+    goto_action:
+        primitives:
+            - goto
+
+tables:
+    flexible_table_0:
+        matches:
+            hdr.ethernet.destination: configured_any
+            hdr.ethernet.source: configured_any
+            hdr.vlan.vid: configured_any
+            hdr.vlan.pcp: configured_any
+            hdr.ipv4.source: configured_any
+            hdr.ipv4.destination: configured_any
+            hdr.ipv4.dscp: configured_any
+            istd.ingress_port: configured_any
+            istd.ethertype: configured_any
+            istd.ip_proto: configured_any
+            istd.is_tagged: configured_any
+            hdr.ipv6.source: configured_any
+            hdr.ipv6.destination: configured_any
+            hdr.ipv6.flow_label: configured_any
+            hdr.arp.tpa: configured_any
+            hdr.arp.spa: configured_any
+            hdr.arp.tha: configured_any
+            hdr.arp.sha: configured_any
+            hdr.tcp.source: configured_any
+            hdr.tcp.destination: configured_any
+            hdr.udp.source: configured_any
+            hdr.udp.destination: configured_any
+        actions:
+            - notify_controller_action
+            - set_eth_dst_action
+            - set_eth_src_action
+            - set_vlan_vid_action
+            - pop_vlan_action
+            - drop_action
+            - output_action
+            - multicast_action
+            - clone_action
+            - set_ipv4_src_action
+            - set_ipv4_dst_action
+            - goto_action
+
+    flexible_table_1:
+        matches:
+            hdr.ethernet.destination: configured_any
+            hdr.ethernet.source: configured_any
+            hdr.vlan.vid: configured_any
+            hdr.vlan.pcp: configured_any
+            hdr.ipv4.source: configured_any
+            hdr.ipv4.destination: configured_any
+            istd.ingress_port: configured_any
+            istd.ethertype: configured_any
+            istd.ip_proto: configured_any
+            istd.is_tagged: configured_any
+            hdr.ipv6.source: configured_any
+            hdr.ipv6.destination: configured_any
+            hdr.ipv6.flow_label: configured_any
+            hdr.arp.tpa: configured_any
+            hdr.arp.spa: configured_any
+            hdr.arp.tha: configured_any
+            hdr.arp.sha: configured_any
+            hdr.tcp.source: configured_any
+            hdr.tcp.destination: configured_any
+            hdr.udp.source: configured_any
+            hdr.udp.destination: configured_any
+        actions:
+            - notify_controller_action
+            - set_eth_dst_action
+            - set_eth_src_action
+            - set_vlan_vid_action
+            - pop_vlan_action
+            - drop_action
+            - output_action
+            - multicast_action
+            - clone_action
+            - set_ipv4_src_action
+            - set_ipv4_dst_action
+            - goto_action
+
+    flexible_table_2:
+        matches:
+            hdr.ethernet.destination: configured_any
+            hdr.ethernet.source: configured_any
+            hdr.vlan.vid: configured_any
+            hdr.vlan.pcp: configured_any
+            hdr.ipv4.source: configured_any
+            hdr.ipv4.destination: configured_any
+            istd.ingress_port: configured_any
+            istd.ethertype: configured_any
+            istd.ip_proto: configured_any
+            istd.is_tagged: configured_any
+            hdr.ipv6.source: configured_any
+            hdr.ipv6.destination: configured_any
+            hdr.ipv6.flow_label: configured_any
+            hdr.arp.tpa: configured_any
+            hdr.arp.spa: configured_any
+            hdr.arp.tha: configured_any
+            hdr.arp.sha: configured_any
+            hdr.tcp.source: configured_any
+            hdr.tcp.destination: configured_any
+            hdr.udp.source: configured_any
+            hdr.udp.destination: configured_any
+        actions:
+            - notify_controller_action
+            - set_eth_dst_action
+            - set_eth_src_action
+            - set_vlan_vid_action
+            - pop_vlan_action
+            - drop_action
+            - output_action
+            - multicast_action
+            - clone_action
+            - set_ipv4_src_action
+            - set_ipv4_dst_action
+            - goto_action
+
+    flexible_table_3:
+        matches:
+            hdr.ethernet.destination: configured_any
+            hdr.ethernet.source: configured_any
+            hdr.vlan.vid: configured_any
+            hdr.vlan.pcp: configured_any
+            hdr.ipv4.source: configured_any
+            hdr.ipv4.destination: configured_any
+            istd.ingress_port: configured_any
+            istd.ethertype: configured_any
+            istd.ip_proto: configured_any
+            istd.is_tagged: configured_any
+            hdr.ipv6.source: configured_any
+            hdr.ipv6.destination: configured_any
+            hdr.ipv6.flow_label: configured_any
+            hdr.arp.tpa: configured_any
+            hdr.arp.spa: configured_any
+            hdr.arp.tha: configured_any
+            hdr.arp.sha: configured_any
+            hdr.tcp.source: configured_any
+            hdr.tcp.destination: configured_any
+            hdr.udp.source: configured_any
+            hdr.udp.destination: configured_any
+        actions:
+            - notify_controller_action
+            - set_eth_dst_action
+            - set_eth_src_action
+            - set_vlan_vid_action
+            - pop_vlan_action
+            - drop_action
+            - output_action
+            - multicast_action
+            - clone_action
+            - set_ipv4_src_action
+            - set_ipv4_dst_action
+            - goto_action
+
+    flexible_table_4:
+        matches:
+            hdr.ethernet.destination: configured_any
+            hdr.ethernet.source: configured_any
+            hdr.vlan.vid: configured_any
+            hdr.vlan.pcp: configured_any
+            hdr.ipv4.source: configured_any
+            hdr.ipv4.destination: configured_any
+            istd.ingress_port: configured_any
+            istd.ethertype: configured_any
+            istd.ip_proto: configured_any
+            istd.is_tagged: configured_any
+            hdr.ipv6.source: configured_any
+            hdr.ipv6.destination: configured_any
+            hdr.ipv6.flow_label: configured_any
+            hdr.arp.tpa: configured_any
+            hdr.arp.spa: configured_any
+            hdr.arp.tha: configured_any
+            hdr.arp.sha: configured_any
+            hdr.tcp.source: configured_any
+            hdr.tcp.destination: configured_any
+            hdr.udp.source: configured_any
+            hdr.udp.destination: configured_any
+        actions:
+            - notify_controller_action
+            - set_eth_dst_action
+            - set_eth_src_action
+            - set_vlan_vid_action
+            - pop_vlan_action
+            - drop_action
+            - output_action
+            - multicast_action
+            - clone_action
+            - set_ipv4_src_action
+            - set_ipv4_dst_action
+            - goto_action
+
+    flexible_table_5:
+        matches:
+            hdr.ethernet.destination: configured_any
+            hdr.ethernet.source: configured_any
+            hdr.vlan.vid: configured_any
+            hdr.vlan.pcp: configured_any
+            hdr.ipv4.source: configured_any
+            hdr.ipv4.destination: configured_any
+            istd.ingress_port: configured_any
+            istd.ethertype: configured_any
+            istd.ip_proto: configured_any
+            istd.is_tagged: configured_any
+            hdr.ipv6.source: configured_any
+            hdr.ipv6.destination: configured_any
+            hdr.ipv6.flow_label: configured_any
+            hdr.arp.tpa: configured_any
+            hdr.arp.spa: configured_any
+            hdr.arp.tha: configured_any
+            hdr.arp.sha: configured_any
+            hdr.tcp.source: configured_any
+            hdr.tcp.destination: configured_any
+            hdr.udp.source: configured_any
+            hdr.udp.destination: configured_any
+        actions:
+            - notify_controller_action
+            - set_eth_dst_action
+            - set_eth_src_action
+            - set_vlan_vid_action
+            - pop_vlan_action
+            - drop_action
+            - output_action
+            - multicast_action
+            - clone_action
+            - set_ipv4_src_action
+            - set_ipv4_dst_action
+            - goto_action
+
+    flexible_table_6:
+        matches:
+            hdr.ethernet.destination: configured_any
+            hdr.ethernet.source: configured_any
+            hdr.vlan.vid: configured_any
+            hdr.vlan.pcp: configured_any
+            hdr.ipv4.source: configured_any
+            hdr.ipv4.destination: configured_any
+            istd.ingress_port: configured_any
+            istd.ethertype: configured_any
+            istd.ip_proto: configured_any
+            istd.is_tagged: configured_any
+            hdr.ipv6.source: configured_any
+            hdr.ipv6.destination: configured_any
+            hdr.ipv6.flow_label: configured_any
+            hdr.arp.tpa: configured_any
+            hdr.arp.spa: configured_any
+            hdr.arp.tha: configured_any
+            hdr.arp.sha: configured_any
+            hdr.tcp.source: configured_any
+            hdr.tcp.destination: configured_any
+            hdr.udp.source: configured_any
+            hdr.udp.destination: configured_any
+        actions:
+            - notify_controller_action
+            - set_eth_dst_action
+            - set_eth_src_action
+            - set_vlan_vid_action
+            - pop_vlan_action
+            - drop_action
+            - output_action
+            - multicast_action
+            - clone_action
+            - set_ipv4_src_action
+            - set_ipv4_dst_action
+            - goto_action
+
+    flexible_table_7:
+        matches:
+            hdr.ethernet.destination: configured_any
+            hdr.ethernet.source: configured_any
+            hdr.vlan.vid: configured_any
+            hdr.vlan.pcp: configured_any
+            hdr.ipv4.source: configured_any
+            hdr.ipv4.destination: configured_any
+            istd.ingress_port: configured_any
+            istd.ethertype: configured_any
+            istd.ip_proto: configured_any
+            istd.is_tagged: configured_any
+            hdr.ipv6.source: configured_any
+            hdr.ipv6.destination: configured_any
+            hdr.ipv6.flow_label: configured_any
+            hdr.arp.tpa: configured_any
+            hdr.arp.spa: configured_any
+            hdr.arp.tha: configured_any
+            hdr.arp.sha: configured_any
+            hdr.tcp.source: configured_any
+            hdr.tcp.destination: configured_any
+            hdr.udp.source: configured_any
+            hdr.udp.destination: configured_any
+        actions:
+            - notify_controller_action
+            - set_eth_dst_action
+            - set_eth_src_action
+            - set_vlan_vid_action
+            - pop_vlan_action
+            - drop_action
+            - output_action
+            - multicast_action
+            - clone_action
+            - set_ipv4_src_action
+            - set_ipv4_dst_action
+            - goto_action
+
+    flexible_table_8:
+        matches:
+            hdr.ethernet.destination: configured_any
+            hdr.ethernet.source: configured_any
+            hdr.vlan.vid: configured_any
+            hdr.vlan.pcp: configured_any
+            hdr.ipv4.source: configured_any
+            hdr.ipv4.destination: configured_any
+            istd.ingress_port: configured_any
+            istd.ethertype: configured_any
+            istd.ip_proto: configured_any
+            istd.is_tagged: configured_any
+            hdr.ipv6.source: configured_any
+            hdr.ipv6.destination: configured_any
+            hdr.ipv6.flow_label: configured_any
+            hdr.arp.tpa: configured_any
+            hdr.arp.spa: configured_any
+            hdr.arp.tha: configured_any
+            hdr.arp.sha: configured_any
+            hdr.tcp.source: configured_any
+            hdr.tcp.destination: configured_any
+            hdr.udp.source: configured_any
+            hdr.udp.destination: configured_any
+        actions:
+            - notify_controller_action
+            - set_eth_dst_action
+            - set_eth_src_action
+            - set_vlan_vid_action
+            - pop_vlan_action
+            - drop_action
+            - output_action
+            - multicast_action
+            - clone_action
+            - set_ipv4_src_action
+            - set_ipv4_dst_action
+            - goto_action
+
+    flexible_table_9:
+        matches:
+            hdr.ethernet.destination: configured_any
+            hdr.ethernet.source: configured_any
+            hdr.vlan.vid: configured_any
+            hdr.vlan.pcp: configured_any
+            hdr.ipv4.source: configured_any
+            hdr.ipv4.destination: configured_any
+            istd.ingress_port: configured_any
+            istd.ethertype: configured_any
+            istd.ip_proto: configured_any
+            istd.is_tagged: configured_any
+            hdr.ipv6.source: configured_any
+            hdr.ipv6.destination: configured_any
+            hdr.ipv6.flow_label: configured_any
+            hdr.arp.tpa: configured_any
+            hdr.arp.spa: configured_any
+            hdr.arp.tha: configured_any
+            hdr.arp.sha: configured_any
+            hdr.tcp.source: configured_any
+            hdr.tcp.destination: configured_any
+            hdr.udp.source: configured_any
+            hdr.udp.destination: configured_any
+        actions:
+            - notify_controller_action
+            - set_eth_dst_action
+            - set_eth_src_action
+            - set_vlan_vid_action
+            - pop_vlan_action
+            - drop_action
+            - output_action
+            - multicast_action
+            - clone_action
+            - set_ipv4_src_action
+            - set_ipv4_dst_action
+            - goto_action
+
+    flexible_table_10:
+        matches:
+            hdr.ethernet.destination: configured_any
+            hdr.ethernet.source: configured_any
+            hdr.vlan.vid: configured_any
+            hdr.vlan.pcp: configured_any
+            hdr.ipv4.source: configured_any
+            hdr.ipv4.destination: configured_any
+            istd.ingress_port: configured_any
+            istd.ethertype: configured_any
+            istd.ip_proto: configured_any
+            istd.is_tagged: configured_any
+            hdr.ipv6.source: configured_any
+            hdr.ipv6.destination: configured_any
+            hdr.ipv6.flow_label: configured_any
+            hdr.arp.tpa: configured_any
+            hdr.arp.spa: configured_any
+            hdr.arp.tha: configured_any
+            hdr.arp.sha: configured_any
+            hdr.tcp.source: configured_any
+            hdr.tcp.destination: configured_any
+            hdr.udp.source: configured_any
+            hdr.udp.destination: configured_any
+        actions:
+            - notify_controller_action
+            - set_eth_dst_action
+            - set_eth_src_action
+            - set_vlan_vid_action
+            - pop_vlan_action
+            - drop_action
+            - output_action
+            - multicast_action
+            - clone_action
+            - set_ipv4_src_action
+            - set_ipv4_dst_action
+            - goto_action
+
+    flexible_table_11:
+        matches:
+            hdr.ethernet.destination: configured_any
+            hdr.ethernet.source: configured_any
+            hdr.vlan.vid: configured_any
+            hdr.vlan.pcp: configured_any
+            hdr.ipv4.source: configured_any
+            hdr.ipv4.destination: configured_any
+            istd.ingress_port: configured_any
+            istd.ethertype: configured_any
+            istd.ip_proto: configured_any
+            istd.is_tagged: configured_any
+            hdr.ipv6.source: configured_any
+            hdr.ipv6.destination: configured_any
+            hdr.ipv6.flow_label: configured_any
+            hdr.arp.tpa: configured_any
+            hdr.arp.spa: configured_any
+            hdr.arp.tha: configured_any
+            hdr.arp.sha: configured_any
+            hdr.tcp.source: configured_any
+            hdr.tcp.destination: configured_any
+            hdr.udp.source: configured_any
+            hdr.udp.destination: configured_any
+        actions:
+            - notify_controller_action
+            - set_eth_dst_action
+            - set_eth_src_action
+            - set_vlan_vid_action
+            - pop_vlan_action
+            - drop_action
+            - output_action
+            - multicast_action
+            - clone_action
+            - set_ipv4_src_action
+            - set_ipv4_dst_action
+pipeline:
+    - ingress_module:
+        - type: table
+          table: flexible_table_0
+    - flex_module_1:
+        - type: target
+          name: target_1
+          iftrue:
+            - type: table
+              table: flexible_table_1
+    - flex_module_2:
+        - type: target
+          name: target_2
+          iftrue:
+            - type: table
+              table: flexible_table_2
+    - flex_module_3:
+        - type: target
+          name: target_3
+          iftrue:
+            - type: table
+              table: flexible_table_3
+    - flex_module_4:
+        - type: target
+          name: target_4
+          iftrue:
+            - type: table
+              table: flexible_table_4
+    - flex_module_5:
+        - type: target
+          name: target_5
+          iftrue:
+            - type: table
+              table: flexible_table_5
+    - flex_module_6:
+        - type: target
+          name: target_6
+          iftrue:
+            - type: table
+              table: flexible_table_6
+    - flex_module_7:
+        - type: target
+          name: target_7
+          iftrue:
+            - type: table
+              table: flexible_table_7
+    - flex_module_8:
+        - type: target
+          name: target_8
+          iftrue:
+            - type: table
+              table: flexible_table_8
+    - flex_module_9:
+        - type: target
+          name: target_9
+          iftrue:
+            - type: table
+              table: flexible_table_9
+    - flex_module_10:
+        - type: target
+          name: target_10
+          iftrue:
+            - type: table
+              table: flexible_table_10
+    - flex_module_11:
+        - type: target
+          name: target_11
+          iftrue:
+            - type: table
+              table: flexible_table_11

@@ -1,0 +1,41 @@
+actions:
+    set_tunnel_action:
+        primitives:
+            - set_eth_dst
+            - set_vid
+            - output
+    detunnel_action:
+        primitives:
+            - set_eth_dst
+            - output
+    tunnel_action:
+        primitives:
+            - output
+tables:
+    tunnel_table:
+        matches:
+            istd.ingress_port: all_or_exact
+            hdr.vlan.vid: all_or_exact
+        actions:
+            - detunnel_action
+            - tunnel_action
+    policy_table_v6:
+        matches:
+            hdr.ipv6.source: ternary
+            hdr.ipv6.destination: ternary
+            istd.ip_proto: all_or_exact
+            hdr.tcp.source: ternary
+            hdr.tcp.destination: ternary
+        actions:
+            - set_tunnel_action
+pipeline:
+    - tunnel_module:
+        - type: table
+          table: tunnel_table
+    - policy_module:
+        - type: conditional
+          field: istd.ethertype
+          value: 0x86dd
+          iftrue:
+            - type: table
+              table: policy_table_v6

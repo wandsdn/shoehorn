@@ -1,0 +1,61 @@
+actions:
+    drop_action:
+        primitives:
+            - mark_to_drop
+    multicast_action:
+        primitives:
+            - multicast
+    unicast_action:
+        primitives:
+            - output
+    notify_action:
+        primitives:
+            - notify
+    set_eth_bloom_action:
+        primitives:
+            - set_eth_dst
+            - set_eth_src
+            - output
+tables:
+    encapsulate_v4:
+        matches:
+            hdr.ethernet.destination: all_or_exact
+            hdr.ipv4.destination: all_or_exact
+        actions:
+            - set_eth_bloom_action
+            - unicast_action
+    encapsulate_v6:
+        matches:
+            hdr.ethernet.destination: all_or_exact
+            hdr.ipv6.destination: all_or_exact
+        actions:
+            - set_eth_bloom_action
+            - unicast_action
+    forwarding:
+        matches:
+            hdr.ethernet.source: ternary
+            hdr.ethernet.destination: ternary
+        actions:
+            - multicast_action
+            - unicast_action
+            - drop_action
+            - set_eth_bloom_action
+
+pipeline:
+    - encapsulate:
+        - type: conditional
+          field: istd.ethertype
+          value: 0x86dd
+          iftrue:
+            - type: table
+              table: encapsulate_v6
+          iffalse:
+            - type: conditional
+              field: istd.ethertype
+              value: 0x800
+              iftrue:
+                - type: table
+                  table: encapsulate_v4
+    - forward:
+        - type: table
+          table: forwarding

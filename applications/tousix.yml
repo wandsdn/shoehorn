@@ -1,0 +1,21 @@
+actions:
+    forward:
+        primitives:
+            - output
+tables:
+    eth_dst_table:
+        matches:
+            hdr.ethernet.destination: exact
+        actions:
+            - forward
+    arp_table:
+        matches:
+            hdr.arp.tpa: exact
+        actions:
+            - forward
+pipeline:
+    - tousix_module:
+        - type: table
+          table: eth_dst_table
+        - type: table
+          table: arp_table

@@ -1,0 +1,54 @@
+actions:
+    output_action:
+        primitives:
+            - output
+    notify_action:
+        primitives:
+            - notify
+tables:
+    detection_table:
+        matches:
+            hdr.ipv4.dscp: all_or_exact
+        actions:
+            - notify_action
+    elephants:
+        matches:
+            hdr.ipv4.destination: exact
+            hdr.ipv4.source: exact
+            istd.ip_proto: exact
+            hdr.tcp.source: exact
+            hdr.tcp.destination: exact
+        actions:
+            - output_action
+
+    mice:
+        matches:
+            hdr.ipv4.destination: ternary
+        actions:
+            - output_action
+
+pipeline:
+    - elephants_module:
+        - type: table
+          table: detection_table
+        - type: conditional
+          field: istd.ethertype
+          value: 0x86dd
+          iffalse:
+            - type: conditional
+              field: istd.ethertype
+              value: 0x800
+              iftrue:
+                - type: table
+                  table: elephants
+    - mice_module:
+        - type: conditional
+          field: istd.ethertype
+          value: 0x86dd
+          iffalse:
+            - type: conditional
+              field: istd.ethertype
+              value: 0x800
+              iftrue:
+                - type: table
+                  table: mice

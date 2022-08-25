@@ -1,0 +1,61 @@
+actions:
+    forward_action:
+        primitives:
+            - output
+    intent_action:
+        primitives:
+            - set_eth_dst
+            - set_eth_src
+            - output
+    drop_action:
+        primitives:
+            - mark_to_drop
+tables:
+    arp_table:
+        matches:
+            hdr.arp.tpa: all_or_exact
+        actions:
+            - forward_action
+    switching_table:
+        matches:
+            hdr.ethernet.destination: exact
+        actions:
+            - forward_action
+            - drop_action
+    intent_table_v4:
+        matches:
+            hdr.ipv4.source: ternary
+            hdr.ipv4.destination: ternary
+        actions:
+            - intent_action
+    intent_table_v6:
+        matches:
+            hdr.ipv6.source: ternary
+            hdr.ipv6.destination: ternary
+        actions:
+            - intent_action
+pipeline:
+    - intent_module:
+        - type: conditional
+          field: istd.ethertype
+          value: 0x86dd
+          iftrue:
+            - type: table
+              table: intent_table_v6
+          iffalse:
+            - type: conditional
+              field: istd.ethertype
+              value: 0x800
+              iftrue:
+                - type: table
+                  table: intent_table_v4
+              iffalse:
+                - type: conditional
+                  field: istd.ethertype
+                  value: 0x806
+                  iftrue:
+                    - type: table
+                      table: arp_table
+    - forwarding_module:
+        - type: table
+          table: switching_table

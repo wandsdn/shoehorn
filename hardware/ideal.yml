@@ -1,0 +1,460 @@
+actions:
+    drop_action:
+        primitives:
+            - mark_to_drop
+    set_vrf_action:
+        primitives:
+            - set_vrf
+    set_vid_action:
+        primitives:
+            - set_vid
+    vlan_translate_vrf_action:
+        primitives:
+            - set_vid
+            - set_vrf
+    vlan_translate_action:
+        primitives:
+            - set_vid
+    pop_label_action:
+        primitives:
+            - pop_mpls
+            - dec_ttl
+    pop_label_copy_ttl:
+        primitives:
+            - pop_mpls
+            - dec_ttl
+            - copy_ttl_in
+    mpls_interface_action:
+        primitives:
+            - set_eth_src
+            - set_eth_dst
+            - dec_ttl
+            - output
+    l2_tagged_interface_action:
+        primitives:
+            - output
+    l2_untagged_interface_action:
+        primitives:
+            - pop_vlan
+    l2_tagged_interface_notify_action:
+        primitives:
+            - notify
+            - output
+    l2_untagged_interface_notify_action:
+        primitives:
+            - notify
+            - pop_vlan
+    l2_rewrite_eth_dst_action:
+        primitives:
+            - set_eth_dst
+    l2_rewrite_action:
+        primitives:
+            - set_vid
+            - output
+    l2_full_rewrite_action:
+        primitives:
+            - set_vid
+            - set_eth_src
+            - set_eth_dst
+            - output
+    l2_no_vlan_rewrite_action:
+        primitives:
+            - set_eth_src
+            - set_eth_dst
+            - output
+    l2_multicast_action:
+        primitives:
+            - multicast
+    ipv4_src_rewrite_action:
+        primitives:
+            - set_ipv4_src
+    ipv4_dst_rewrite_action:
+        primitives:
+            - set_ipv4_dst
+    notify_action:
+        primitives:
+            - notify
+    clone_action:
+        primitives:
+            - clone
+    l3_unicast_action:
+        primitives:
+            - set_eth_src
+            - set_eth_dst
+            - set_vid
+            - dec_ttl
+            - output
+    l3_multicast_action:
+        primitives:
+            - set_eth_src
+            - set_eth_dst
+            - set_vid
+            - dec_ttl
+            - multicast
+    l3_ecmp_action:
+        primitives:
+            - set_eth_src
+            - set_eth_dst
+            - set_vid
+            - dec_ttl
+            - output
+# Assumption: I can infer recirculation from ingress_port, tunnel_id and vrf matches
+tables:
+    dc_overlay:
+        matches:
+            istd.ingress_port: exact
+            istd.recirculation: exact
+        actions:
+            []
+    dc_overlay_bridging:
+        matches:
+            istd.recirculation: exact
+            hdr.vlan.vid: all_or_exact
+        actions:
+            - l2_untagged_interface_action
+            - l2_tagged_interface_action
+            - drop_action
+            - notify_action
+    ingress_port:
+        matches:
+            istd.ingress_port: exact
+            istd.recirculation: exact
+        actions:
+            - set_vrf_action
+            - drop_action
+
+    vlan_filtering:
+        type: table
+        matches:
+            istd.recirculation: exact
+            istd.ingress_port: exact
+            hdr.vlan.vid: exact
+        actions:
+            - set_vrf_action
+            - vlan_translate_vrf_action
+            - vlan_translate_action
+            - drop_action
+
+    untagged_packet_port_vlan_assignment:
+        matches:
+            istd.ingress_port: exact
+            istd.recirculation: all_or_exact
+        actions:
+            - set_vid_action
+            - set_vrf_action
+            - drop_action
+
+    source_mac_learning:
+        matches:
+            istd.ingress_port: exact
+            istd.recirculation: exact
+            hdr.vlan.vid: exact
+            hdr.ethernet.source: exact
+        actions:
+            - notify_action
+
+    policy_acl:
+        matches:
+            istd.ingress_port: all_or_exact
+            istd.recirculation: all_or_exact
+            hdr.ethernet.source: ternary
+            hdr.ethernet.destination: ternary
+            istd.ethertype: all_or_exact
+            hdr.vlan.vid: ternary
+            hdr.vlan.pcp: all_or_exact
+            hdr.vlan.dei: all_or_exact
+            istd.vrf: all_or_exact
+            hdr.ipv4.source: ternary
+            hdr.ipv4.destination: ternary
+            istd.ip_proto: all_or_exact
+            hdr.ipv4.dscp: all_or_exact
+            hdr.ipv4.ecn: all_or_exact
+            hdr.arp.spa: ternary
+            hdr.arp.tpa: ternary
+            hdr.ipv6.source: ternary
+            hdr.ipv6.destination: ternary
+            istd.ip_proto: all_or_exact
+            hdr.ipv6.flow_label: ternary
+            hdr.ipv6.dscp: all_or_exact
+            hdr.ipv6.ecn: all_or_exact
+            hdr.tcp.source: configured_any
+            hdr.tcp.destination: configured_any
+            hdr.udp.source: configured_any
+            hdr.udp.destination: configured_any
+        actions:
+            - clone_action
+            - notify_action
+            - l2_untagged_interface_action
+            - l2_tagged_interface_action
+            - l2_rewrite_action
+            - l2_rewrite_eth_dst_action
+            - l2_no_vlan_rewrite_action
+            - l2_full_rewrite_action
+            - l2_multicast_action
+            - l3_unicast_action
+            - l3_multicast_action
+            - l3_ecmp_action
+            - ipv4_src_rewrite_action
+            - ipv4_dst_rewrite_action
+            - drop_action
+
+    v4_5_tuple:
+        matches:
+            istd.recirculation: configured_exact
+            hdr.ipv4.source: exact
+            hdr.ipv4.destination: exact
+            istd.ip_proto: exact
+            hdr.tcp.source: configured_exact
+            hdr.tcp.destination: configured_exact
+            hdr.udp.source: configured_exact
+            hdr.udp.destination: configured_exact
+        actions:
+            - clone_action
+            - notify_action
+            - l2_untagged_interface_action
+            - l2_tagged_interface_action
+            - l2_rewrite_action
+            - l2_rewrite_eth_dst_action
+            - l2_no_vlan_rewrite_action
+            - l2_full_rewrite_action
+            - l2_multicast_action
+            - l3_unicast_action
+            - l3_ecmp_action
+            - ipv4_src_rewrite_action
+            - ipv4_dst_rewrite_action
+            - drop_action
+
+    v6_5_tuple:
+        matches:
+            istd.recirculation: configured_exact
+            hdr.ipv6.source: exact
+            hdr.ipv6.destination: exact
+            istd.ip_proto: exact
+            hdr.tcp.source: configured_exact
+            hdr.tcp.destination: configured_exact
+            hdr.udp.source: configured_exact
+            hdr.udp.destination: configured_exact
+        actions:
+            - clone_action
+            - notify_action
+            - l2_untagged_interface_action
+            - l2_tagged_interface_action
+            - l2_rewrite_action
+            - l2_rewrite_eth_dst_action
+            - l2_no_vlan_rewrite_action
+            - l2_full_rewrite_action
+            - l2_multicast_action
+            - l3_unicast_action
+            - l3_ecmp_action
+            - ipv4_src_rewrite_action
+            - ipv4_dst_rewrite_action
+            - drop_action
+
+    policy_acl_2:
+        matches:
+            istd.ingress_port: all_or_exact
+            istd.recirculation: all_or_exact
+            hdr.ethernet.source: ternary
+            hdr.ethernet.destination: ternary
+            istd.ethertype: all_or_exact
+            hdr.vlan.vid: ternary
+            hdr.vlan.pcp: all_or_exact
+            hdr.vlan.dei: all_or_exact
+            istd.vrf: all_or_exact
+            hdr.ipv4.source: ternary
+            hdr.ipv4.destination: ternary
+            istd.ip_proto: all_or_exact
+            hdr.ipv4.dscp: all_or_exact
+            hdr.ipv4.ecn: all_or_exact
+            hdr.arp.spa: ternary
+            hdr.ipv6.source: ternary
+            hdr.ipv6.destination: ternary
+            istd.ip_proto: all_or_exact
+            hdr.ipv6.flow_label: ternary
+            hdr.ipv6.dscp: all_or_exact
+            hdr.ipv6.ecn: all_or_exact
+            hdr.tcp.source: configured_any
+            hdr.tcp.destination: configured_any
+            hdr.udp.source: configured_any
+            hdr.udp.destination: configured_any
+        actions:
+            - clone_action
+            - notify_action
+            - l2_untagged_interface_action
+            - l2_tagged_interface_action
+            - l2_rewrite_action
+            - l2_rewrite_eth_dst_action
+            - l2_no_vlan_rewrite_action
+            - l2_full_rewrite_action
+            - l2_multicast_action
+            - l3_unicast_action
+            - l3_ecmp_action
+            - ipv4_src_rewrite_action
+            - ipv4_dst_rewrite_action
+            - drop_action
+
+    mpls_termination_mac:
+        matches:
+            istd.ingress_port: all_or_exact
+            istd.recirculation: all_or_exact
+            hdr.vlan.vid: all_or_exact
+            hdr.ethernet.destination: exact
+        actions: []
+
+    mpls_1:
+        matches:
+            hdr.mpls.label: exact
+            hdr.mpls.bos: configured_exact
+            istd.ingress_port: configured_exact
+        actions:
+            - pop_label_action
+            - mpls_interface_action
+            - vlan_translate_action
+
+    mpls_2:
+        matches:
+            hdr.mpls.label: exact
+            hdr.mpls.bos: configured_exact
+            istd.ingress_port: configured_exact
+        actions:
+            - pop_label_action
+            - mpls_interface_action
+            - vlan_translate_action
+
+    termination_mac:
+        matches:
+            istd.ingress_port: all_or_exact
+            istd.recirculation: all_or_exact
+            hdr.vlan.vid: all_or_exact
+            hdr.ethernet.destination: exact
+        actions: []
+
+    ipv6_unicast_routing:
+        matches:
+            istd.recirculation: exact
+            hdr.ipv6.destination: lpm
+            istd.vrf: exact
+        actions:
+            - l3_unicast_action
+            - l3_ecmp_action
+            - drop_action
+            - notify_action
+
+    ipv4_unicast_routing:
+        matches:
+            istd.recirculation: exact
+            hdr.ipv4.destination: lpm
+            istd.vrf: exact
+        actions:
+            - l3_unicast_action
+            - l3_ecmp_action
+            - drop_action
+            - notify_action
+
+    unicast_bridging:
+        matches:
+            hdr.ethernet.destination: exact
+            hdr.vlan.vid: configured_exact
+        actions:
+            - l2_tagged_interface_action
+            - l2_untagged_interface_action
+            - l2_tagged_interface_notify_action
+            - l2_untagged_interface_notify_action
+            - drop_action
+
+    dlf_vlan_bridging:
+        matches:
+            hdr.vlan.vid: exact
+        actions:
+            - l2_multicast_action
+
+pipeline:
+    - vlan_action_module:
+        # Changing the order of the tables here should have no impact
+        - type: table
+          table: ingress_port
+
+        - type: conditional
+          field: istd.is_tagged
+          value: 1
+          mask: null
+          iftrue:
+              - type: table
+                table: vlan_filtering
+          iffalse:
+              - type: table
+                table: untagged_packet_port_vlan_assignment
+
+    - source_mac_learning_module:
+        - type: table
+          table: source_mac_learning
+
+    - mpls_module:
+        - type: conditional
+          field: istd.ethertype
+          value: 0x8847
+          iftrue:
+            - type: table
+              table: mpls_termination_mac
+              iftrue:
+                - type: table
+                  table: mpls_1
+                  iftrue:
+                    - type: table
+                      table: mpls_2
+
+    - policy_action_module:
+        # ok, so by moving the policy tables to this point in the pipeline
+        # means that tables will not hit the forwarding tables that otherwise
+        # would have. This will result in slight inaccuracies
+        # the alternative is that the policy action module is applied at the
+        # same time as the other tables, which would be ambiguous as to how
+        # packets are affected.
+        # I guess I can fix that by not allowing the actions that would cause
+        # ambiguities, or not allow the actions that would cause the
+        # inaccuracies
+        - type: table
+          table: policy_acl
+
+    - policy_action_module_2:
+        #- type: table
+        #  table: policy_acl_2
+        - type: conditional
+          field: istd.ethertype
+          value: 0x86DD
+          mask: null
+          iftrue:
+            - type: table
+              table: v6_5_tuple
+          iffalse:
+            - type: conditional
+              field: istd.ethertype
+              value: 0x800
+              iftrue:
+                  - type: table
+                    table: v4_5_tuple
+
+    - forwarding_action_module:
+        - type: table
+          table: termination_mac
+          iftrue:
+              - type: conditional
+                field: istd.ethertype
+                value: 0x86DD
+                mask: null
+                iftrue:
+                    - type: table
+                      table: ipv6_unicast_routing
+                iffalse:
+                    - type: conditional
+                      field: istd.ethertype
+                      value: 0x800
+                      iftrue:
+                        - type: table
+                          table: ipv4_unicast_routing
+          iffalse:
+              - type: table
+                table: unicast_bridging
+                iffalse:
+                    - type: table
+                      table: dlf_vlan_bridging
